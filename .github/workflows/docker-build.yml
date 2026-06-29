@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build, Push, and Update Helm Values
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout app source
         uses: actions/checkout@v4
 
       - name: Set up JDK
@@ -34,3 +34,25 @@ jobs:
 
       - name: Push Docker image
         run: docker push ghcr.io/${{ github.repository_owner }}/hello-k8s:${{ github.sha }}
+
+      - name: Checkout config repo
+        uses: actions/checkout@v4
+        with:
+          repository: j26423397-byte/kube_dev
+          token: ${{ secrets.CONFIG_REPO_TOKEN }}
+          path: kube_dev
+
+      - name: Update Helm values image tag
+        run: |
+          cd kube_dev
+          sed -i 's|repository: .*|repository: ghcr.io/${{ github.repository_owner }}/hello-k8s|' values.yaml
+          sed -i 's|tag: .*|tag: "${{ github.sha }}"|' values.yaml
+
+      - name: Commit and push config change
+        run: |
+          cd kube_dev
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add values.yaml
+          git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes to commit"
+          git push
