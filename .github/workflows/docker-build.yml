@@ -40,7 +40,7 @@ jobs:
         with:
           repository: j26423397-byte/kube_dev
           token: ${{ secrets.CONFIG_REPO_TOKEN }}
-          path: kube_dev
+          path: kubedev
 
       - name: Update Helm values image tag
         run: |
