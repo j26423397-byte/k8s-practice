@@ -53,6 +53,6 @@ jobs:
           cd kube_dev/advanced-web
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add advanced-web/values.yaml
+          git add values.yaml
           git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes to commit"
           git push
