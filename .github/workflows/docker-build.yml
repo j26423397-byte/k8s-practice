@@ -42,17 +42,26 @@ jobs:
           token: ${{ secrets.CONFIG_REPO_TOKEN }}
           path: kube_dev
 
+      - name: Debug config repo files
+        run: |
+          pwd
+          ls -la
+          echo "---- kube_dev ----"
+          ls -la kube_dev
+          echo "---- files ----"
+          find kube_dev -maxdepth 4 -type f
+
       - name: Update Helm values image tag
         run: |
-          cd kube_dev
+          cd kube_dev/advanced-web
           sed -i 's|repository: .*|repository: ghcr.io/${{ github.repository_owner }}/hello-k8s|' values.yaml
           sed -i 's|tag: .*|tag: "${{ github.sha }}"|' values.yaml
 
       - name: Commit and push config change
         run: |
-          cd kube_dev/advanced-web
+          cd kube_dev
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          it add advanced-web/values.yaml
+          git add advanced-web/values.yaml
           git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes to commit"
           git push
