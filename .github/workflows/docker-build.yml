@@ -50,9 +50,9 @@ jobs:
 
       - name: Commit and push config change
         run: |
-          cd kube_dev
+          cd kube_dev/advanced-web
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add values.yaml
+          git add advanced-web/values.yaml
           git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes to commit"
           git push
