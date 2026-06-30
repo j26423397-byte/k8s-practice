@@ -40,7 +40,7 @@ jobs:
         with:
           repository: j26423397-byte/kube_dev
           token: ${{ secrets.CONFIG_REPO_TOKEN }}
-          path: kubedev
+          path: kube_dev
 
       - name: Update Helm values image tag
         run: |
@@ -50,9 +50,9 @@ jobs:
 
       - name: Commit and push config change
         run: |
-          cd kubedev/advanced-web
+          cd kube_dev/advanced-web
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add values.yaml
+          it add advanced-web/values.yaml
           git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes to commit"
           git push
