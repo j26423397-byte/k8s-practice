@@ -53,7 +53,7 @@ jobs:
 
       - name: Update Helm values image tag
         run: |
-          cd kube_dev/advanced-web
+          cd kube_dev
           sed -i 's|repository: .*|repository: ghcr.io/${{ github.repository_owner }}/hello-k8s|' values.yaml
           sed -i 's|tag: .*|tag: "${{ github.sha }}"|' values.yaml
 
@@ -62,6 +62,6 @@ jobs:
           cd kube_dev
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add advanced-web/values.yaml
+          git add values.yaml
           git commit -m "Update image tag to ${{ github.sha }}" || echo "No changes to commit"
           git push
